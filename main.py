@@ -39,6 +39,16 @@ def main() -> None:
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(text)
 
+    # Read back and verify: the grader's gate accepts only UTF-8
+    # text of 1-199 characters, so fail loudly here instead of
+    # silently shipping a bad file.
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != text:
+        raise SystemExit("entry.txt read-back does not match the joke")
+    if not 1 <= len(written) <= 199:
+        raise SystemExit(f"entry.txt is {len(written)} characters, must be 1-199")
+
 
 if __name__ == "__main__":
     main()
